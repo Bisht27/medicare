@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>MediCare Pro — Find Doctors, Labs & Diagnostics</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --primary:#1a6fc4;--primary-dark:#0f4d8f;--primary-light:#e8f1fb;--primary-mid:#4a90d9;
+  --accent:#0d9e7e;--accent-light:#e0f5f0;
+  --gold:#f59e0b;--danger:#ef4444;--success:#10b981;
+  --surface:#fff;--surface-2:#f8fafc;--surface-3:#f1f5f9;
+  --border:#e2e8f0;--border-strong:#cbd5e1;
+  --text:#0f172a;--text-2:#475569;--text-3:#94a3b8;
+  --sh-sm:0 1px 4px rgba(0,0,0,.07);
+  --sh-md:0 4px 14px rgba(0,0,0,.09);
+  --sh-lg:0 12px 36px rgba(0,0,0,.12);
+  --r-sm:6px;--r-md:10px;--r-lg:16px;--r-xl:24px;
+  --ff-body:'DM Sans',sans-serif;--ff-display:'Playfair Display',serif;
+  --ease:200ms cubic-bezier(.4,0,.2,1);
+}
+body{font-family:var(--ff-body);background:var(--surface-3);color:var(--text);line-height:1.6;font-size:15px;-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit}
+button{font-family:var(--ff-body);cursor:pointer}
+
+.wrap{max-width:1200px;margin:0 auto;padding:0 24px}
+.page{min-height:100vh}
+.section{padding:44px 0}
+.hidden{display:none!important}
+
+nav{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;box-shadow:var(--sh-sm)}
+.nav-inner{display:flex;align-items:center;gap:32px;height:64px}
+.logo{font-family:var(--ff-display);font-size:22px;font-weight:700;color:var(--primary);white-space:nowrap}
+.logo span{color:var(--accent)}
+.nav-links{display:flex;gap:4px;flex:1}
+.nav-link{padding:8px 14px;border-radius:var(--r-md);font-size:14px;font-weight:500;color:var(--text-2);border:none;background:none;transition:all var(--ease)}
+.nav-link:hover,.nav-link.active{background:var(--primary-light);color:var(--primary)}
+.nav-actions{display:flex;gap:10px;margin-left:auto}
+.btn{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;border-radius:var(--r-md);font-size:14px;font-weight:600;border:none;cursor:pointer;transition:all var(--ease)}
+.btn-primary{background:var(--primary);color:#fff}
+.btn-primary:hover{background:var(--primary-dark);box-shadow:0 4px 14px rgba(26,111,196,.35);transform:translateY(-1px)}
+.btn-outline{background:transparent;color:var(--primary);border:1.5px solid var(--primary)}
+.btn-outline:hover{background:var(--primary-light)}
+.btn-sm{padding:6px 13px;font-size:13px}
+.btn-lg{padding:13px 26px;font-size:15px}
+.btn-accent{background:var(--accent);color:#fff}
+.btn-accent:hover{background:#0b7d64}
+.btn-ghost{background:transparent;color:var(--text-2);border:1px solid var(--border)}
+.btn-ghost:hover{background:var(--surface-2)}
+
+.hero{
+  background:linear-gradient(135deg,#0f4d8f 0%,#1a6fc4 50%,#2186de 100%);
+  padding:56px 0 48px;color:#fff;position:relative;overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;inset:0;
+  background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+.hero-inner{position:relative;z-index:1}
+.hero h1{font-family:var(--ff-display);font-size:42px;font-weight:700;line-height:1.2;margin-bottom:14px}
+.hero h1 span{color:#7dd3fc}
+.hero p{font-size:17px;opacity:.85;margin-bottom:36px;max-width:540px}
+.search-bar{
+  display:flex;background:#fff;border-radius:var(--r-xl);
+  overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.2);
+  max-width:680px;
+}
+.search-bar input{flex:1;border:none;padding:16px 20px;font-size:15px;outline:none;color:var(--text)}
+.search-bar select{border:none;border-left:1px solid var(--border);padding:16px 14px;font-size:14px;color:var(--text-2);background:#fff;outline:none;cursor:pointer}
+.search-bar button{padding:14px 28px;background:var(--primary);color:#fff;border:none;font-size:15px;font-weight:600;cursor:pointer;transition:background var(--ease)}
+.search-bar button:hover{background:var(--primary-dark)}
+.hero-stats{display:flex;gap:40px;margin-top:36px}
+.hero-stat{text-align:center}
+.hero-stat strong{display:block;font-size:26px;font-weight:700}
+.hero-stat span{font-size:13px;opacity:.75}
+
+.quick-actions{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;padding:32px 0}
+.qa-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r-lg);padding:24px 20px;text-align:center;
+  cursor:pointer;transition:all var(--ease);
+}
+.qa-card:hover{border-color:var(--primary);transform:translateY(-3px);box-shadow:var(--sh-md)}
+.qa-icon{font-size:32px;margin-bottom:10px;display:block}
+.qa-card h3{font-size:15px;font-weight:600;color:var(--text);margin-bottom:4px}
+.qa-card p{font-size:12px;color:var(--text-3)}
+
+.page-header{background:var(--surface);border-bottom:1px solid var(--border);padding:28px 0 20px}
+.page-header h2{font-family:var(--ff-display);font-size:28px;font-weight:700;margin-bottom:4px}
+.filters-row{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:16px}
+.filter-select{width:auto;padding:8px 32px 8px 12px;font-size:13px;border-radius:var(--r-md);cursor:pointer}
+.results-count{color:var(--text-2);font-size:14px;margin-left:auto}
+.doctor-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;padding:28px 0}
+
+.doc-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;transition:all var(--ease)}
+.doc-card:hover{box-shadow:var(--sh-md);transform:translateY(-2px)}
+.doc-card-top{padding:20px;display:flex;gap:16px}
+.doc-avatar{
+  width:68px;height:68px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;font-weight:700;flex-shrink:0;
+}
+.doc-info{flex:1;min-width:0}
+.doc-name{font-size:17px;font-weight:700;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.doc-spec{font-size:13px;color:var(--primary);font-weight:600;margin-bottom:4px}
+.doc-qual{font-size:12px;color:var(--text-2);margin-bottom:8px}
+.doc-meta{display:flex;gap:16px;flex-wrap:wrap}
+.doc-meta-item{display:flex;align-items:center;gap:5px;font-size:13px;color:var(--text-2)}
+.doc-card-mid{padding:0 20px 16px;border-top:1px solid var(--border)}
+.doc-hosp{display:flex;align-items:center;gap:8px;padding:12px 0;font-size:13px}
+.doc-hosp-name{font-weight:600;color:var(--text)}
+.doc-hosp-loc{color:var(--text-3)}
+.doc-card-bottom{background:var(--surface-2);border-top:1px solid var(--border);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:gap}
+.doc-fee-block{display:flex;flex-direction:column;gap:2px}
+.fee-label{font-size:11px;color:var(--text-3);font-weight:500;text-transform:uppercase;letter-spacing:.5px}
+.fee-val{font-size:20px;font-weight:700;color:var(--primary)}
+.fee-online{font-size:12px;color:var(--text-2)}
+.doc-actions{display:flex;gap:8px;flex-wrap:wrap}
+.slot-badge{background:var(--accent-light);color:var(--accent);padding:4px 10px;border-radius:20px;font-size:12px;font-weight:600}
+.rating-chip{display:inline-flex;align-items:center;gap:4px;background:var(--surface-3);padding:3px 8px;border-radius:20px;font-size:13px;font-weight:600}
+.rating-chip .star{color:var(--gold)}
+
+.lab-hero{background:linear-gradient(135deg,#065f46 0%,#0d9e7e 100%);color:#fff;padding:40px 0}
+.lab-hero h2{font-family:var(--ff-display);font-size:30px;margin-bottom:8px}
+.labs-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;padding:28px 0}
+.lab-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;transition:all var(--ease)}
+.lab-card:hover{box-shadow:var(--sh-md);transform:translateY(-2px)}
+.lab-card-top{padding:20px;display:flex;align-items:center;gap:16px;border-bottom:1px solid var(--border)}
+.lab-dot{width:14px;height:14px;border-radius:50%;flex-shrink:0}
+.lab-name{font-size:17px;font-weight:700}
+.lab-type{font-size:12px;color:var(--text-3);margin-top:2px}
+.lab-badges{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600}
+.badge-green{background:#dcfce7;color:#15803d}
+.badge-blue{background:var(--primary-light);color:var(--primary-dark)}
+.badge-gold{background:#fef3c7;color:#92400e}
+.lab-card-mid{padding:16px 20px}
+.lab-detail-row{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-2);margin-bottom:8px}
+.lab-card-bottom{background:var(--surface-2);border-top:1px solid var(--border);padding:14px 20px;display:flex;justify-content:space-between;align-items:center}
+.lab-contact{font-size:13px;color:var(--text-2)}
+.lab-phone{font-weight:600;color:var(--primary);font-size:14px}
+.nabl-seal{background:#fffbeb;border:1px solid #fde68a;color:#92400e;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;letter-spacing:.5px}
+
+.tests-section{padding:32px 0}
+.compare-table-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--sh-sm)}
+.compare-table{width:100%;border-collapse:collapse;font-size:14px}
+.compare-table th{background:var(--surface-2);color:var(--text-2);font-weight:600;font-size:12px;letter-spacing:.5px;text-transform:uppercase;padding:12px 16px;text-align:left;border-bottom:2px solid var(--border)}
+.compare-table td{padding:14px 16px;border-bottom:1px solid var(--border);vertical-align:middle}
+.compare-table tr:last-child td{border-bottom:none}
+.compare-table tr:hover td{background:var(--surface-2)}
+.price-cell{font-weight:700;color:var(--primary);font-size:15px}
+.best-price{background:var(--accent-light)!important;color:#065f46;font-weight:700;border-radius:4px;padding:3px 8px}
+.test-name-cell{font-weight:600;color:var(--text)}
+.test-cat-badge{background:var(--primary-light);color:var(--primary-dark);padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600}
+
+.imaging-hero{background:linear-gradient(135deg,#4c1d95 0%,#7c3aed 100%);color:#fff;padding:40px 0}
+.imaging-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.img-tab{padding:7px 18px;border-radius:20px;border:1.5px solid rgba(255,255,255,.4);color:rgba(255,255,255,.8);background:transparent;font-size:14px;font-weight:500;cursor:pointer;transition:all var(--ease)}
+.img-tab.active{background:#fff;color:#4c1d95;border-color:#fff}
+.imaging-content{padding:32px 0}
+.imaging-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;margin-bottom:16px;box-shadow:var(--sh-sm)}
+.imaging-card-header{padding:18px 24px;background:var(--surface-2);display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border)}
+.imaging-title{font-size:16px;font-weight:700}
+.imaging-meta{display:flex;gap:16px;align-items:center}
+.imaging-meta-item{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text-2)}
+.price-grid{display:grid;grid-template-columns:repeat(5,1fr);border-top:1px solid var(--border)}
+.price-col{padding:16px;text-align:center;border-right:1px solid var(--border)}
+.price-col:last-child{border-right:none}
+.price-col-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--text-3);margin-bottom:6px}
+.price-col-name{font-size:12px;color:var(--text-2);margin-bottom:8px;font-weight:500}
+.price-col-amount{font-size:18px;font-weight:700;color:var(--primary)}
+.price-col-amount.cheapest{color:var(--accent);}
+.price-col.highlight-col{background:var(--accent-light)}
+.center-contact{font-size:11px;color:var(--text-3);margin-top:4px}
+
+.packages-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;padding:28px 0}
+.pkg-card{background:var(--surface);border:2px solid var(--border);border-radius:var(--r-lg);padding:24px;transition:all var(--ease);position:relative}
+.pkg-card:hover{border-color:var(--primary);box-shadow:var(--sh-md)}
+.pkg-card.popular{border-color:var(--primary)}
+.popular-tag{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--primary);color:#fff;padding:3px 16px;border-radius:20px;font-size:12px;font-weight:700;white-space:nowrap}
+.pkg-name{font-size:18px;font-weight:700;margin-bottom:4px}
+.pkg-price{margin:14px 0}
+.pkg-price .amount{font-size:28px;font-weight:700;color:var(--primary)}
+.pkg-price .old{text-decoration:line-through;color:var(--text-3);font-size:15px;margin-left:8px}
+.pkg-price .save{background:#dcfce7;color:#15803d;padding:2px 8px;border-radius:20px;font-size:12px;font-weight:700;margin-left:8px}
+.pkg-tests{margin:14px 0}
+.pkg-tests li{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-2);padding:4px 0}
+.pkg-tests li::before{content:'✓';color:var(--success);font-weight:700;flex-shrink:0}
+
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px)}
+.modal{background:var(--surface);border-radius:var(--r-xl);max-width:680px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:var(--sh-lg)}
+.modal-head{padding:24px 28px 0;display:flex;justify-content:space-between;align-items:flex-start}
+.modal-close{background:var(--surface-3);border:none;border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;color:var(--text-2);transition:all var(--ease)}
+.modal-close:hover{background:var(--border);color:var(--text)}
+.modal-body{padding:20px 28px 28px}
+.detail-section{margin-bottom:24px}
+.detail-section h4{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--text-3);margin-bottom:12px}
+.service-tag{display:inline-flex;background:var(--primary-light);color:var(--primary-dark);padding:4px 12px;border-radius:20px;font-size:12px;font-weight:500;margin:3px}
+.award-item{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--text-2);margin-bottom:8px}
+.contact-card{background:var(--surface-2);border:1px solid var(--border);border-radius:var(--r-md);padding:16px}
+.contact-row{display:flex;align-items:center;gap:10px;font-size:14px;margin-bottom:10px}
+.contact-row:last-child{margin-bottom:0}
+.contact-label{color:var(--text-3);width:60px;font-size:12px;text-transform:uppercase;letter-spacing:.4px;font-weight:600}
+.contact-val{color:var(--primary);font-weight:600}
+
+.tab-bar{display:flex;border-bottom:2px solid var(--border);margin-bottom:28px}
+.tab{padding:10px 20px;border:none;background:none;font-size:14px;font-weight:600;color:var(--text-2);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all var(--ease)}
+.tab.active{color:var(--primary);border-bottom-color:var(--primary)}
+.tab:hover:not(.active){color:var(--text)}
+
+footer{background:var(--text);color:rgba(255,255,255,.7);padding:48px 0 28px}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:40px}
+.footer-brand{font-family:var(--ff-display);font-size:22px;color:#fff;margin-bottom:12px}
+.footer-brand span{color:#7dd3fc}
+.footer-desc{font-size:14px;line-height:1.7;max-width:280px}
+.footer-heading{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:rgba(255,255,255,.5);margin-bottom:16px}
+.footer-link{display:block;font-size:14px;color:rgba(255,255,255,.65);margin-bottom:8px;transition:color var(--ease)}
+.footer-link:hover{color:#fff}
+.footer-bottom{border-top:1px solid rgba(255,255,255,.1);padding-top:20px;display:flex;justify-content:space-between;align-items:center;font-size:13px}
+
+.divider{height:1px;background:var(--border);margin:20px 0}
+.text-center{text-align:center}
+.text-muted{color:var(--text-3)}
+.font-bold{font-weight:700}
+.section-head{margin-bottom:28px}
+.section-head h3{font-family:var(--ff-display);font-size:26px;font-weight:700;color:var(--text);margin-bottom:4px}
+.section-head p{color:var(--text-2);font-size:15px}
+.chip{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600}
+.chip-blue{background:var(--primary-light);color:var(--primary-dark)}
+.chip-green{background:#dcfce7;color:#15803d}
+.chip-gold{background:#fef3c7;color:#92400e}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+
+@media(max-width:768px){
+  .doctor-grid,.labs-grid,.packages-grid{grid-template-columns:1fr}
+  .price-grid{grid-template-columns:repeat(2,1fr)}
+  .footer-grid{grid-template-columns:1fr 1fr}
+  .hero h1{font-size:28px}
+  .quick-actions{grid-template-columns:repeat(2,1fr)}
+  .nav-links{display:none}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap nav-inner">
+    <div class="logo">Medi<span>Care</span> Pro</div>
+    <div class="nav-links">
+      <button class="nav-link active" onclick="showPage('home')">Home</button>
+      <button class="nav-link" onclick="showPage('doctors')">Find Doctors</button>
+      <button class="nav-link" onclick="showPage('labs')">Lab Tests</button>
+      <button class="nav-link" onclick="showPage('imaging')">Imaging &amp; Scans</button>
+      <button class="nav-link" onclick="showPage('packages')">Health Packages</button>
+    </div>
+    <div class="nav-actions">
+      <button class="btn btn-outline btn-sm">Sign In</button>
+      <button class="btn btn-primary btn-sm">Book Now</button>
+    </div>
+  </div>
+</nav>
+
+<div id="page-home" class="page">
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="wrap hero-inner">
+      <h1>Your Health, Our <span>Priority</span><br/>Find the Best Care</h1>
+      <p>Book appointments with top doctors, compare lab test prices, and schedule diagnostic scans — all in one place.</p>
+      <div class="search-bar">
+        <input type="text" id="home-search" placeholder="Search doctors, tests, specialties..." />
+        <select id="home-city">
+          <option>Delhi NCR</option>
+          <option>Mumbai</option>
+          <option>Bangalore</option>
+          <option>Chennai</option>
+          <option>Hyderabad</option>
+        </select>
+        <button onclick="handleSearch()">Search</button>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat"><strong>1,200+</strong><span>Verified Doctors</span></div>
+        <div class="hero-stat"><strong>50+</strong><span>Lab Partners</span></div>
+        <div class="hero-stat"><strong>4.8★</strong><span>Avg. Rating</span></div>
+        <div class="hero-stat"><strong>2L+</strong><span>Happy Patients</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quick Actions -->
+  <div class="wrap">
+    <div class="quick-actions">
+      <div class="qa-card" onclick="showPage('doctors')">
+        <span class="qa-icon">🩺</span>
+        <h3>Find a Doctor</h3>
+        <p>1,200+ verified specialists</p>
+      </div>
+      <div class="qa-card" onclick="showPage('labs')">
+        <span class="qa-icon">🔬</span>
+        <h3>Book Lab Test</h3>
+        <p>Compare prices across labs</p>
+      </div>
+      <div class="qa-card" onclick="showPage('imaging')">
+        <span class="qa-icon">🫁</span>
+        <h3>MRI / CT / X-Ray</h3>
+        <p>Schedule diagnostic imaging</p>
+      </div>
+      <div class="qa-card" onclick="showPage('packages')">
+        <span class="qa-icon">📦</span>
+        <h3>Health Packages</h3>
+        <p>Full-body check-up deals</p>
+      </div>
+    </div>
+
+    <!-- Featured doctors teaser -->
+    <div class="section-head">
+      <h3>Top Doctors in Delhi</h3>
+      <p>Highly rated specialists with same-day appointments available</p>
+    </div>
+    <div class="doctor-grid" id="home-doctors-preview"></div>
+    <div style="text-align:center;margin-top:12px">
+      <button class="btn btn-outline" onclick="showPage('doctors')">View All Doctors →</button>
+    </div>
+  </div>
+
+</div>
+
+<div id="page-doctors" class="page hidden">
+  <div class="page-header">
+    <div class="wrap">
+      <h2>Find Doctors</h2>
+      <p style="color:var(--text-2);font-size:14px">Book appointments with verified specialists near you</p>
+      <div class="filters-row">
+        <select class="filter-select" id="spec-filter" onchange="filterDoctors()">
+          <option value="All">All Specialties</option>
+          <option>Cardiologist</option>
+          <option>Dermatologist</option>
+          <option>Neurologist</option>
+          <option>Orthopedic</option>
+          <option>Pediatrician</option>
+          <option>Gynecologist</option>
+          <option>Psychiatrist</option>
+          <option>ENT</option>
+        </select>
+        <select class="filter-select" id="fee-filter" onchange="filterDoctors()">
+          <option value="all">Any Fee</option>
+          <option value="low">Under ₹800</option>
+          <option value="mid">₹800–₹1200</option>
+          <option value="high">₹1200+</option>
+        </select>
+        <select class="filter-select" id="sort-filter" onchange="filterDoctors()">
+          <option value="rating">Sort: Rating</option>
+          <option value="fee-asc">Fee: Low to High</option>
+          <option value="fee-desc">Fee: High to Low</option>
+          <option value="exp">Experience</option>
+        </select>
+        <span class="results-count" id="doc-count"></span>
+      </div>
+    </div>
+  </div>
+  <div class="wrap">
+    <div class="doctor-grid" id="doctors-grid"></div>
+  </div>
+</div>
+
+<div id="page-labs" class="page hidden">
+  <div class="lab-hero">
+    <div class="wrap">
+      <h2>Lab Tests &amp; Diagnostics</h2>
+      <p style="opacity:.85;font-size:15px;margin-top:6px">Compare test prices across top diagnostic labs in Delhi</p>
+    </div>
+  </div>
+  <div class="wrap">
+    <!-- Lab Cards -->
+    <div class="section-head" style="margin-top:32px">
+      <h3>Our Lab Partners</h3>
+      <p>NABL-accredited labs with home sample collection</p>
+    </div>
+    <div class="labs-grid" id="labs-grid"></div>
+
+  
+    <div class="section-head" style="margin-top:40px">
+      <h3>Compare Test Prices</h3>
+      <p>Find the best price for your test across all partner labs</p>
+    </div>
+    <div style="margin-bottom:16px">
+      <input type="text" id="test-search" placeholder="Search test name (e.g. CBC, Thyroid, Vitamin D)..." style="max-width:400px" oninput="filterTests()" />
+    </div>
+    <div class="compare-table-wrap">
+      <table class="compare-table" id="tests-table">
+        <thead>
+          <tr>
+            <th>Test Name</th>
+            <th>Category</th>
+            <th style="text-align:center">Metropolis</th>
+            <th style="text-align:center">Dr. Lal</th>
+            <th style="text-align:center">SRL</th>
+            <th style="text-align:center">Thyrocare</th>
+            <th>Report</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="tests-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div id="page-imaging" class="page hidden">
+  <div class="imaging-hero">
+    <div class="wrap">
+      <h2 style="font-family:var(--ff-display);font-size:30px">Imaging &amp; Radiology</h2>
+      <p style="opacity:.85;font-size:15px;margin-top:6px;margin-bottom:18px">Compare MRI, CT Scan, X-Ray &amp; more across top hospitals</p>
+      <div class="imaging-tabs" id="imaging-tabs">
+        <button class="img-tab active" onclick="setImgFilter('All',this)">All Scans</button>
+        <button class="img-tab" onclick="setImgFilter('MRI',this)">MRI</button>
+        <button class="img-tab" onclick="setImgFilter('CT Scan',this)">CT Scan</button>
+        <button class="img-tab" onclick="setImgFilter('X-Ray',this)">X-Ray</button>
+        <button class="img-tab" onclick="setImgFilter('Ultrasound',this)">Ultrasound</button>
+        <button class="img-tab" onclick="setImgFilter('Bone Scan',this)">Bone Scan</button>
+        <button class="img-tab" onclick="setImgFilter('Nuclear Medicine',this)">Nuclear Medicine</button>
+      </div>
+    </div>
+  </div>
+  <div class="wrap imaging-content">
+    <div class="section-head">
+      <h3>Price Comparison — All Centers</h3>
+      <p>Prices in ₹ · Highlighted = lowest price · Contact centers for CGHS / insurance rates</p>
+    </div>
+    <div id="imaging-list"></div>
+    
+    <!-- Centers info -->
+    <div class="section-head" style="margin-top:40px">
+      <h3>Imaging Centers</h3>
+      <p>Contact directly to confirm availability and book your slot</p>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px" id="centers-grid"></div>
+  </div>
+</div>
+
+<div id="page-packages" class="page hidden">
+  <div class="page-header">
+    <div class="wrap">
+      <h2>Health Check-up Packages</h2>
+      <p style="color:var(--text-2);font-size:14px">Comprehensive health screenings at discounted prices</p>
+    </div>
+  </div>
+  <div class="wrap">
+    <div class="packages-grid" id="packages-grid" style="margin-top:28px"></div>
+  </div>
+</div>
+
+<div id="doc-modal" class="modal-overlay hidden" onclick="closeModal(event)">
+  <div class="modal" id="modal-content"></div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">Medi<span>Care</span> Pro</div>
+        <p class="footer-desc">India's most trusted platform for booking doctors, lab tests, and diagnostic imaging. Your health, simplified.</p>
+      </div>
+      <div>
+        <div class="footer-heading">Services</div>
+        <a class="footer-link" href="#" onclick="showPage('doctors');return false">Find Doctors</a>
+        <a class="footer-link" href="#" onclick="showPage('labs');return false">Lab Tests</a>
+        <a class="footer-link" href="#" onclick="showPage('imaging');return false">MRI / CT / X-Ray</a>
+        <a class="footer-link" href="#" onclick="showPage('packages');return false">Health Packages</a>
+      </div>
+      <div>
+        <div class="footer-heading">Company</div>
+        <a class="footer-link" href="#">About Us</a>
+        <a class="footer-link" href="#">For Hospitals</a>
+        <a class="footer-link" href="#">For Labs</a>
+        <a class="footer-link" href="#">Careers</a>
+      </div>
+      <div>
+        <div class="footer-heading">Contact</div>
+        <a class="footer-link" href="tel:1800-555-0000">1800-555-0000 (Free)</a>
+        <a class="footer-link" href="mailto:care@medicarepro.in">care@medicarepro.in</a>
+        <p style="font-size:13px;margin-top:12px;color:rgba(255,255,255,.4)">Mon–Sat, 8 AM – 8 PM</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 MediCare Pro. All rights reserved.</span>
+      <span>Privacy Policy · Terms · Disclaimer</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+
+async function bookAppointment(doctor) {
+
+    const patientName = prompt("Enter Patient Name");
+    const email = prompt("Enter Email");
+    const phone = prompt("Enter Phone Number");
+
+    const date = prompt("Enter Appointment Date (YYYY-MM-DD)");
+    const time = prompt("Enter Appointment Time");
+
+    const appointment = {
+
+        patientName,
+        email,
+        phone,
+
+        doctorId: doctor.id,
+        doctorName: doctor.name,
+        doctorEmail: doctor.contact.email,
+
+        date,
+        time
+
+    };
+
+    try {
+
+        const response = await fetch(
+            "http://localhost:5000/api/appointments",
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify(appointment)
+            }
+        );
+
+        const result = await response.json();
+
+        if(result.success){
+
+            alert("Appointment Booked Successfully!");
+
+        }else{
+
+            alert(result.message);
+
+        }
+
+    } catch (err) {
+
+        console.error(err);
+
+        alert("Server Error");
+
+    }
+
+}
+
+const DOCTORS = [
+  {id:1,name:"Dr. Arjun Mehta",spec:"Cardiologist",qual:"MBBS, MD (Cardiology), DM",exp:18,rating:4.9,reviews:842,hospital:"Apollo Hospitals",loc:"Connaught Place, Delhi",fee:1200,online:800,avail:["Mon","Wed","Fri"],slot:"Today, 3:00 PM",color:"#1a6fc4",initials:"AM",about:"Specialist in interventional cardiology with 18+ years of experience. Expert in angioplasty, pacemaker implantation, and heart failure management. Previously at AIIMS Delhi.",services:["ECG","Echocardiography","Angiography Consultation","Heart Failure Management","Stress Test"],awards:["Best Cardiologist Award 2022","Excellence in Medicine 2020","AIIMS Gold Medalist"],contact:{phone:"+91-98765-43210",email:"dr.mehta@apollodelhi.com",address:"Apollo Hospitals, Sarita Vihar, Mathura Road, Delhi"}},
+  {id:2,name:"Dr. Priya Sharma",spec:"Dermatologist",qual:"MBBS, MD (Dermatology)",exp:12,rating:4.8,reviews:1203,hospital:"Fortis Healthcare",loc:"Vasant Kunj, Delhi",fee:900,online:600,avail:["Tue","Thu","Sat"],slot:"Tomorrow, 11:00 AM",color:"#e63946",initials:"PS",about:"Award-winning dermatologist specializing in cosmetic procedures, acne treatment, and skin cancer detection. IADVL member.",services:["Skin Biopsy","Laser Treatment","Chemical Peels","Hair Loss Treatment","Vitiligo Surgery"],awards:["Top Dermatologist Delhi 2023","Best Cosmetic Dermatologist 2022"],contact:{phone:"+91-98765-11223",email:"dr.sharma@fortis.com",address:"Fortis Hospital, Sector B, Vasant Kunj, New Delhi"}},
+  {id:3,name:"Dr. Rahul Verma",spec:"Neurologist",qual:"MBBS, MD, DM (Neurology)",exp:22,rating:4.7,reviews:567,hospital:"Max Super Speciality",loc:"Saket, Delhi",fee:1500,online:1000,avail:["Mon","Tue","Thu"],slot:"Today, 5:30 PM",color:"#7c3aed",initials:"RV",about:"Senior neurologist with expertise in epilepsy, stroke management, and neurodegenerative disorders. 22 years of clinical experience.",services:["EEG","EMG","Nerve Conduction Study","Stroke Rehabilitation","Epilepsy Management"],awards:["National Award for Medical Excellence 2021","Top Neurologist India 2019"],contact:{phone:"+91-99887-65432",email:"dr.verma@maxhospital.in",address:"Max Super Speciality Hospital, Press Enclave Road, Saket, Delhi"}},
+  {id:4,name:"Dr. Sneha Patel",spec:"Pediatrician",qual:"MBBS, MD (Pediatrics), Fellowship",exp:9,rating:4.9,reviews:2104,hospital:"Rainbow Children's Hospital",loc:"Dwarka, Delhi",fee:700,online:500,avail:["Mon","Wed","Thu","Sat"],slot:"Today, 2:00 PM",color:"#f59e0b",initials:"SP",about:"Dedicated pediatrician specializing in child development, vaccination programs, and neonatal care. Special interest in developmental delays.",services:["Vaccination","Growth Monitoring","Newborn Care","Child Nutrition Counseling","Developmental Assessment"],awards:["Best Pediatrician Award 2023","Child Health Champion 2022"],contact:{phone:"+91-98654-32109",email:"dr.patel@rainbow.com",address:"Rainbow Children's Hospital, Sector 10, Dwarka, New Delhi"}},
+  {id:5,name:"Dr. Kavya Nair",spec:"Gynecologist",qual:"MBBS, MS (OB-GYN), Fellowship in Infertility",exp:15,rating:4.8,reviews:934,hospital:"Cloudnine Hospitals",loc:"Malviya Nagar, Delhi",fee:1100,online:750,avail:["Tue","Wed","Fri","Sat"],slot:"Tomorrow, 9:00 AM",color:"#0d9e7e",initials:"KN",about:"Expert in high-risk pregnancies, infertility treatment, laparoscopic surgeries, and women's health across all life stages.",services:["Prenatal Care","Fertility Treatment","Laparoscopy","Menopause Management","PCOS Treatment"],awards:["Excellence in Women's Health 2022","Best Gynecologist Delhi 2021"],contact:{phone:"+91-97654-32100",email:"dr.nair@cloudnine.in",address:"Cloudnine Hospital, Malviya Nagar, South Delhi"}},
+  {id:6,name:"Dr. Aditya Singh",spec:"Orthopedic",qual:"MBBS, MS (Orthopedics), Fellowship Joint Replacement",exp:20,rating:4.6,reviews:678,hospital:"Indian Spinal Injuries Centre",loc:"Vasant Kunj, Delhi",fee:1300,online:900,avail:["Mon","Wed","Fri"],slot:"Today, 4:30 PM",color:"#64748b",initials:"AS",about:"Renowned orthopedic surgeon specializing in joint replacement, spine surgery, and sports medicine. Over 3,000 successful surgeries.",services:["Joint Replacement","Spine Surgery","Arthroscopy","Fracture Management","Sports Medicine"],awards:["Best Surgeon Award 2021","National Orthopedic Excellence 2019"],contact:{phone:"+91-96543-21098",email:"dr.singh@isic.co.in",address:"ISIC, Vasant Kunj, New Delhi"}}
+];
+
+const LABS = [
+  {id:1,name:"Metropolis Healthcare",type:"Diagnostic Chain",rating:4.7,reviews:3240,locs:["Connaught Place","Saket","Dwarka","Noida"],nabl:true,home:true,report:"4–6 hours",phone:"1800-599-0177",email:"care@metropolis.in",web:"www.metropolis.in",color:"#1a6fc4"},
+  {id:2,name:"Dr. Lal PathLabs",type:"Diagnostic Chain",rating:4.8,reviews:8920,locs:["Pan Delhi — 50+ centers"],nabl:true,home:true,report:"3–5 hours",phone:"1800-200-2000",email:"info@lalpathlabs.com",web:"www.lalpathlabs.com",color:"#e63946"},
+  {id:3,name:"SRL Diagnostics",type:"Diagnostic Chain",rating:4.5,reviews:2100,locs:["Rohini","Pitampura","Laxmi Nagar"],nabl:true,home:true,report:"6–8 hours",phone:"1800-102-0012",email:"care@srlworld.com",web:"www.srlworld.com",color:"#2d6a4f"},
+  {id:4,name:"Thyrocare Technologies",type:"Wellness Diagnostics",rating:4.6,reviews:4560,locs:["Home pickup — Pan India"],nabl:true,home:true,report:"24–48 hours",phone:"1800-103-4099",email:"info@thyrocare.com",web:"www.thyrocare.com",color:"#7b2d8b"}
+];
+
+const TESTS = [
+  {name:"Complete Blood Count (CBC)",cat:"Blood Test",prep:"No prep",report:"Same Day",p:[350,299,380,199]},
+  {name:"Lipid Profile",cat:"Blood Test",prep:"12hr fasting",report:"Same Day",p:[650,549,700,399]},
+  {name:"HbA1c (Diabetes)",cat:"Blood Test",prep:"No fasting",report:"Same Day",p:[450,399,500,299]},
+  {name:"Thyroid Profile (T3,T4,TSH)",cat:"Hormone Test",prep:"Morning sample",report:"Same Day",p:[750,649,800,499]},
+  {name:"Vitamin D (25-OH)",cat:"Vitamin Test",prep:"No prep",report:"Same Day",p:[1200,999,1300,799]},
+  {name:"Liver Function Test (LFT)",cat:"Organ Function",prep:"8hr fasting",report:"Same Day",p:[850,749,900,599]},
+  {name:"Kidney Function Test (KFT)",cat:"Organ Function",prep:"No prep",report:"Same Day",p:[750,649,800,549]},
+  {name:"COVID-19 RT-PCR",cat:"Infection",prep:"No food 30min",report:"6–12 hours",p:[500,450,499,null]},
+  {name:"Dengue NS1 Antigen",cat:"Infection",prep:"No prep",report:"Same Day",p:[600,549,650,null]},
+  {name:"Iron Studies (Serum Iron)",cat:"Blood Test",prep:"Morning fast",report:"Same Day",p:[700,599,750,449]},
+  {name:"Urine Routine & Microscopy",cat:"Urine Test",prep:"Midstream sample",report:"2–3 hours",p:[200,179,220,149]},
+  {name:"Blood Culture & Sensitivity",cat:"Microbiology",prep:"Before antibiotics",report:"48–72 hours",p:[1200,1099,1300,null]}
+];
+
+const IMAGING = [
+  {name:"MRI Brain",cat:"MRI",dur:"45–60 min",prep:"Remove metal; inform about implants",p:{apollo:8500,fortis:9200,max:7800,aiims:3500,medanta:10000}},
+  {name:"MRI Spine (Lumbar)",cat:"MRI",dur:"40–50 min",prep:"No jewelry; comfortable clothing",p:{apollo:7500,fortis:8200,max:7000,aiims:3000,medanta:9500}},
+  {name:"MRI Knee",cat:"MRI",dur:"35–45 min",prep:"No metal implants",p:{apollo:6500,fortis:7000,max:6200,aiims:2800,medanta:8500}},
+  {name:"CT Scan Head",cat:"CT Scan",dur:"15–20 min",prep:"Remove metal objects",p:{apollo:3500,fortis:3800,max:3200,aiims:1500,medanta:4500}},
+  {name:"CT Scan Chest",cat:"CT Scan",dur:"20–25 min",prep:"Breathe normally; no metal",p:{apollo:4500,fortis:5000,max:4200,aiims:2000,medanta:5500}},
+  {name:"CT Scan Abdomen",cat:"CT Scan",dur:"30–40 min",prep:"6hr fasting; oral contrast",p:{apollo:5500,fortis:6000,max:5200,aiims:2500,medanta:7000}},
+  {name:"CT Angiography (Coronary)",cat:"CT Scan",dur:"30–45 min",prep:"Beta-blocker may be given",p:{apollo:12000,fortis:13500,max:11000,aiims:6000,medanta:15000}},
+  {name:"X-Ray Chest (PA view)",cat:"X-Ray",dur:"5–10 min",prep:"No metal",p:{apollo:500,fortis:600,max:450,aiims:150,medanta:700}},
+  {name:"X-Ray Knee (AP+Lateral)",cat:"X-Ray",dur:"10 min",prep:"No prep",p:{apollo:600,fortis:700,max:550,aiims:200,medanta:800}},
+  {name:"X-Ray Spine (Lumbar)",cat:"X-Ray",dur:"15 min",prep:"Remove metal",p:{apollo:700,fortis:800,max:650,aiims:250,medanta:900}},
+  {name:"Ultrasound Abdomen",cat:"Ultrasound",dur:"20–30 min",prep:"4hr fasting; full bladder",p:{apollo:1500,fortis:1800,max:1400,aiims:600,medanta:2000}},
+  {name:"Ultrasound Pelvis",cat:"Ultrasound",dur:"20–25 min",prep:"Full bladder",p:{apollo:1200,fortis:1500,max:1100,aiims:500,medanta:1800}},
+  {name:"DEXA Scan (Bone Density)",cat:"Bone Scan",dur:"20–30 min",prep:"No calcium 24hr before",p:{apollo:2500,fortis:2800,max:2200,aiims:1000,medanta:3500}},
+  {name:"PET Scan (Whole Body)",cat:"Nuclear Medicine",dur:"3–4 hours",prep:"6hr fasting; no exercise",p:{apollo:18000,fortis:19500,max:17000,aiims:10000,medanta:22000}}
+];
+
+const CENTERS = {
+  apollo:{name:"Apollo Hospitals",loc:"Connaught Place, Delhi",phone:"+91-11-2692-5801",color:"#1a6fc4"},
+  fortis:{name:"Fortis Healthcare",loc:"Vasant Kunj, Delhi",phone:"+91-11-4277-6222",color:"#e63946"},
+  max:{name:"Max Super Speciality",loc:"Saket, Delhi",phone:"+91-11-2651-5050",color:"#7c3aed"},
+  aiims:{name:"AIIMS Delhi",loc:"Ansari Nagar, Delhi",phone:"+91-11-2658-8500",color:"#065f46"},
+  medanta:{name:"Medanta Hospital",loc:"Gurugram, Haryana",phone:"+91-124-4141-414",color:"#92400e"}
+};
+
+const PACKAGES = [
+  {name:"Basic Wellness Check",tests:["Complete Blood Count","Blood Sugar (FBS)","Urine Analysis","Lipid Profile"],orig:2500,price:999,lab:"Dr. Lal PathLabs",popular:false,color:"#1a6fc4"},
+  {name:"Comprehensive Health Screen",tests:["CBC","LFT","KFT","Lipid Profile","Thyroid Profile","Blood Sugar","Vitamin D","HbA1c","Iron Studies","Urine Analysis"],orig:7500,price:2999,lab:"Dr. Lal PathLabs",popular:true,color:"#0d9e7e"},
+  {name:"Cardiac Risk Assessment",tests:["Lipid Profile","ECG","hs-CRP","Homocysteine","Troponin-T","BNP"],orig:4500,price:1999,lab:"Metropolis Healthcare",popular:false,color:"#e63946"},
+  {name:"Diabetes Management Panel",tests:["Fasting Blood Sugar","Post-Prandial BS","HbA1c","Insulin Fasting","Microalbumin","Creatinine","Urine Routine"],orig:3800,price:1599,lab:"Thyrocare",popular:false,color:"#7b2d8b"}
+];
+
+
+let currentPage = 'home';
+let imgFilter = 'All';
+
+function showPage(pg){
+  document.querySelectorAll('.page').forEach(p=>p.classList.add('hidden'));
+  document.getElementById('page-'+pg).classList.remove('hidden');
+  document.querySelectorAll('.nav-link').forEach(l=>l.classList.remove('active'));
+  const link = [...document.querySelectorAll('.nav-link')].find(l=>l.textContent.toLowerCase().includes(pg==='home'?'home':pg==='doctors'?'doctor':pg==='labs'?'lab':pg==='imaging'?'imaging':pg==='packages'?'package':''));
+  if(link) link.classList.add('active');
+  currentPage = pg;
+  window.scrollTo(0,0);
+  if(pg==='doctors') renderDoctors(DOCTORS);
+  if(pg==='labs'){renderLabs();renderTests(TESTS);}
+  if(pg==='imaging') renderImaging('All');
+  if(pg==='packages') renderPackages();
+}
+
+function stars(r){return '★'.repeat(Math.floor(r))+'☆'.repeat(5-Math.floor(r))}
+function fmtPrice(n){return n==null?'—':'₹'+n.toLocaleString('en-IN')}
+function lighten(hex,amt){
+  let r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);
+  return `rgba(${r},${g},${b},${amt})`;
+}
+
+function docCardHTML(d){
+  
+  return `<div class="doc-card" onclick="openDocModal(${d.id})">
+    <div class="doc-card-top">
+      <div class="doc-avatar" style="background:${lighten(d.color,.15)};color:${d.color}">${d.initials}</div>
+      <div class="doc-info">
+        <div class="doc-name">${d.name}</div>
+        <div class="doc-spec">${d.spec}</div>
+        <div class="doc-qual">${d.qual} · ${d.exp} yrs exp</div>
+        <div class="doc-meta">
+          <span class="rating-chip"><span class="star">★</span>${d.rating} <span style="color:var(--text-3);font-weight:400">(${d.reviews.toLocaleString()})</span></span>
+          <span class="chip chip-blue">${d.avail.join(', ')}</span>
+        </div>
+      </div>
+    </div>
+    <div class="doc-card-mid">
+      <div class="doc-hosp">
+        <svg width="16" height="16" fill="none" stroke="var(--primary)" stroke-width="1.5" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <span class="doc-hosp-name">${d.hospital}</span>
+        <span style="color:var(--text-3)">·</span>
+        <span class="doc-hosp-loc">${d.loc}</span>
+      </div>
+      <span class="slot-badge">🕐 Next: ${d.slot}</span>
+    </div>
+    <div class="doc-card-bottom">
+      <div class="doc-fee-block">
+        <span class="fee-label">Clinic Fee</span>
+        <span class="fee-val">${fmtPrice(d.fee)}</span>
+        <span class="fee-online">Online: ${fmtPrice(d.online)}</span>
+      </div>
+      <div class="doc-actions">
+        <button class="btn btn-primary btn-sm" 
+  onclick="event.stopPropagation();bookAppointment(${JSON.stringify(d)})">
+  Book Now
+</button>
+        <button class="btn btn-outline btn-sm" onclick="event.stopPropagation();openDocModal(${d.id})">
+          View Details
+</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+
+function renderDoctors(list){
+  const grid = document.getElementById('doctors-grid');
+  if(!grid) return;
+  grid.innerHTML = list.map(docCardHTML).join('');
+  const cnt = document.getElementById('doc-count');
+  if(cnt) cnt.textContent = list.length+' doctors found';
+}
+
+function filterDoctors(){
+  const spec = document.getElementById('spec-filter').value;
+  const fee = document.getElementById('fee-filter').value;
+  const sort = document.getElementById('sort-filter').value;
+  let list = [...DOCTORS];
+  if(spec!=='All') list=list.filter(d=>d.spec===spec);
+  if(fee==='low') list=list.filter(d=>d.fee<800);
+  else if(fee==='mid') list=list.filter(d=>d.fee>=800&&d.fee<=1200);
+  else if(fee==='high') list=list.filter(d=>d.fee>1200);
+  if(sort==='rating') list.sort((a,b)=>b.rating-a.rating);
+  else if(sort==='fee-asc') list.sort((a,b)=>a.fee-b.fee);
+  else if(sort==='fee-desc') list.sort((a,b)=>b.fee-a.fee);
+  else if(sort==='exp') list.sort((a,b)=>b.exp-a.exp);
+  renderDoctors(list);
+}
+
+function openDocModal(id){
+  const d = DOCTORS.find(x=>x.id===id);
+  if(!d) return;
+  const modal = document.getElementById('modal-content');
+  modal.innerHTML = `
+    <div class="modal-head">
+      <div style="display:flex;align-items:center;gap:16px">
+        <div class="doc-avatar" style="width:72px;height:72px;font-size:24px;background:${lighten(d.color,.15)};color:${d.color}">${d.initials}</div>
+        <div>
+          <div style="font-size:20px;font-weight:700">${d.name}</div>
+          <div style="color:var(--primary);font-weight:600;font-size:14px">${d.spec}</div>
+          <div style="color:var(--text-2);font-size:13px;margin-top:2px">${d.qual} · ${d.exp} years experience</div>
+          <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap">
+            <span class="chip chip-gold">★ ${d.rating} (${d.reviews.toLocaleString()} reviews)</span>
+            ${d.avail.map(a=>`<span class="chip chip-blue">${a}</span>`).join('')}
+          </div>
+        </div>
+      </div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="detail-section">
+        <h4>About</h4>
+        <p style="font-size:14px;color:var(--text-2);line-height:1.7">${d.about}</p>
+      </div>
+      <div class="divider"></div>
+      <div class="detail-section" style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+        <div>
+          <h4>Consultation Fees</h4>
+          <div style="background:var(--surface-2);border-radius:var(--r-md);padding:16px;border:1px solid var(--border)">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+              <span style="font-size:13px;color:var(--text-2)">🏥 Clinic Visit</span>
+              <span style="font-size:20px;font-weight:700;color:var(--primary)">${fmtPrice(d.fee)}</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <span style="font-size:13px;color:var(--text-2)">📹 Online / Video</span>
+              <span style="font-size:20px;font-weight:700;color:var(--accent)">${fmtPrice(d.online)}</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <h4>Practice</h4>
+          <div style="background:var(--surface-2);border-radius:var(--r-md);padding:16px;border:1px solid var(--border);font-size:14px">
+            <div style="font-weight:600">${d.hospital}</div>
+            <div style="color:var(--text-2);margin-top:4px;font-size:13px">${d.contact.address}</div>
+          </div>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="detail-section">
+        <h4>Services &amp; Procedures</h4>
+        <div>${d.services.map(s=>`<span class="service-tag">${s}</span>`).join('')}</div>
+      </div>
+      <div class="divider"></div>
+      <div class="detail-section">
+        <h4>Awards &amp; Recognition</h4>
+        ${d.awards.map(a=>`<div class="award-item">🏆 <span style="font-size:14px;color:var(--text-2)">${a}</span></div>`).join('')}
+      </div>
+      <div class="divider"></div>
+      <div class="detail-section">
+        <h4>Contact Details</h4>
+        <div class="contact-card">
+          <div class="contact-row">
+            <span class="contact-label">Phone</span>
+            <span class="contact-val">${d.contact.phone}</span>
+          </div>
+          <div class="contact-row">
+            <span class="contact-label">Email</span>
+            <span class="contact-val">${d.contact.email}</span>
+          </div>
+          <div class="contact-row">
+            <span class="contact-label">Address</span>
+            <span style="font-size:14px;color:var(--text-2)">${d.contact.address}</span>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;gap:12px;margin-top:24px">
+        <button class="btn btn-outline" style="flex:1" onclick="alert('Video call coming soon!')">📹 Video Consult — ${fmtPrice(d.online)}</button>
+        <button class="btn btn-primary"
+        style="flex:1"
+        onclick="goToAppointment(${d.id})">
+    🗓 Book Appointment — ${fmtPrice(d.fee)}
+</button>
+      </div>
+    </div>`;
+  document.getElementById('doc-modal').classList.remove('hidden');
+}
+
+function closeModal(e){
+  if(!e||e.target.id==='doc-modal') document.getElementById('doc-modal').classList.add('hidden');
+}
+
+function renderLabs(){
+  const grid = document.getElementById('labs-grid');
+  if(!grid) return;
+  grid.innerHTML = LABS.map(lab=>`
+    <div class="lab-card">
+      <div class="lab-card-top">
+        <div class="lab-dot" style="background:${lab.color}"></div>
+        <div style="flex:1">
+          <div class="lab-name">${lab.name}</div>
+          <div class="lab-type">${lab.type}</div>
+          <div class="lab-badges">
+            ${lab.nabl?'<span class="nabl-seal">NABL</span>':''}
+            ${lab.home?'<span class="badge badge-green">🏠 Home Collection</span>':''}
+            <span class="badge badge-blue">★ ${lab.rating} (${lab.reviews.toLocaleString()})</span>
+          </div>
+        </div>
+      </div>
+      <div class="lab-card-mid">
+        <div class="lab-detail-row">
+          <svg width="14" height="14" fill="none" stroke="var(--primary)" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></svg>
+          <span>${lab.locs.join(' · ')}</span>
+        </div>
+        <div class="lab-detail-row">
+          <svg width="14" height="14" fill="none" stroke="var(--accent)" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span>Report in <strong>${lab.report}</strong></span>
+        </div>
+        <div class="lab-detail-row">
+          <svg width="14" height="14" fill="none" stroke="var(--text-2)" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6A19.79 19.79 0 012.12 4.18 2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+          <span style="color:var(--primary);font-weight:600">${lab.phone}</span>
+        </div>
+      </div>
+      <div class="lab-card-bottom">
+        <div>
+          <div style="font-size:11px;color:var(--text-3)">Email</div>
+          <div style="font-size:13px;color:var(--primary);font-weight:500">${lab.email}</div>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-outline btn-sm" onclick="alert('Calling ${lab.phone}')">Call</button>
+          <button class="btn btn-accent btn-sm" onclick="alert('Book test at ${lab.name}')">Book Test</button>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function renderTests(list){
+  const tbody = document.getElementById('tests-tbody');
+  if(!tbody) return;
+  tbody.innerHTML = list.map(t=>{
+    const validPrices = t.p.filter(x=>x!=null);
+    const minP = Math.min(...validPrices);
+    return `<tr>
+      <td class="test-name-cell">${t.name}<br><small style="color:var(--text-3);font-size:11px">Prep: ${t.prep}</small></td>
+      <td><span class="test-cat-badge">${t.cat}</span></td>
+      ${t.p.map(px=>`<td style="text-align:center">${px==null?'<span style="color:var(--text-3)">—</span>':`<span class="${px===minP?'best-price':''} price-cell">${fmtPrice(px)}</span>`}</td>`).join('')}
+      <td style="color:var(--text-2);font-size:13px">${t.report}</td>
+      <td><button class="btn btn-primary btn-sm" onclick="alert('Booking test: ${t.name}')">Book</button></td>
+    </tr>`;
+  }).join('');
+}
+
+function filterTests(){
+  const q = document.getElementById('test-search').value.toLowerCase();
+  renderTests(q ? TESTS.filter(t=>t.name.toLowerCase().includes(q)||t.cat.toLowerCase().includes(q)) : TESTS);
+}
+
+function setImgFilter(cat, btn){
+  imgFilter = cat;
+  document.querySelectorAll('.img-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderImaging(cat);
+}
+
+function renderImaging(cat){
+  const list = cat==='All' ? IMAGING : IMAGING.filter(i=>i.cat===cat);
+  const centerKeys = Object.keys(CENTERS);
+  const container = document.getElementById('imaging-list');
+  if(!container) return;
+  container.innerHTML = list.map(item=>{
+    const validPrices = Object.values(item.p).filter(v=>v!=null);
+    const minP = Math.min(...validPrices);
+    const centerCols = centerKeys.map(k=>{
+      const p = item.p[k];
+      const isMin = p===minP;
+      return `<div class="price-col${isMin?' highlight-col':''}">
+        <div class="price-col-name">${CENTERS[k].name.split(' ')[0]}</div>
+        <div class="price-col-amount${isMin?' cheapest':''}">${p==null?'—':fmtPrice(p)}</div>
+        ${isMin?'<div style="font-size:10px;color:var(--accent);font-weight:700;margin-top:2px">LOWEST</div>':''}
+      </div>`;
+    }).join('');
+    return `<div class="imaging-card">
+      <div class="imaging-card-header">
+        <div>
+          <div class="imaging-title">${item.name}</div>
+          <div style="font-size:12px;color:var(--text-3);margin-top:4px">${item.cat}</div>
+        </div>
+        <div class="imaging-meta">
+          <div class="imaging-meta-item">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            ${item.dur}
+          </div>
+          <div class="imaging-meta-item" style="max-width:200px">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            ${item.prep}
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="alert('Booking: ${item.name}')">Book →</button>
+        </div>
+      </div>
+      <div class="price-grid">${centerCols}</div>
+    </div>`;
+  }).join('');
+
+  // Centers
+  const centersGrid = document.getElementById('centers-grid');
+  if(centersGrid) centersGrid.innerHTML = centerKeys.map(k=>{
+    const c = CENTERS[k];
+    return `<div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:18px;box-shadow:var(--sh-sm)">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+        <div style="width:12px;height:12px;border-radius:50%;background:${c.color};flex-shrink:0"></div>
+        <div style="font-weight:700;font-size:15px">${c.name}</div>
+      </div>
+      <div style="font-size:13px;color:var(--text-2);margin-bottom:8px">📍 ${c.loc}</div>
+      <div style="font-size:13px;color:var(--primary);font-weight:600;margin-bottom:14px">📞 ${c.phone}</div>
+      <button class="btn btn-outline btn-sm" style="width:100%" onclick="alert('Calling ${c.name}')">Contact for Appointment</button>
+    </div>`;
+  }).join('');
+}
+
+function renderPackages(){
+  const grid = document.getElementById('packages-grid');
+  if(!grid) return;
+  grid.innerHTML = PACKAGES.map(pkg=>`
+    <div class="pkg-card${pkg.popular?' popular':''}">
+      ${pkg.popular?'<div class="popular-tag">⭐ Most Popular</div>':''}
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+        <div style="width:10px;height:10px;border-radius:50%;background:${pkg.color}"></div>
+        <div class="pkg-name">${pkg.name}</div>
+      </div>
+      <div style="font-size:13px;color:var(--text-2)">by ${pkg.lab}</div>
+      <div class="pkg-price">
+        <span class="amount">${fmtPrice(pkg.price)}</span>
+        <span class="old">${fmtPrice(pkg.orig)}</span>
+        <span class="save">${Math.round((1-pkg.price/pkg.orig)*100)}% OFF</span>
+      </div>
+      <div class="divider"></div>
+      <div class="pkg-tests">
+        <div style="font-size:12px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">${pkg.tests.length} Tests Included</div>
+        <ul style="list-style:none">
+          ${pkg.tests.map(t=>`<li style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-2);padding:3px 0"><span style="color:var(--success);font-weight:700">✓</span>${t}</li>`).join('')}
+        </ul>
+      </div>
+      <button class="btn btn-primary" style="width:100%;margin-top:20px;justify-content:center" onclick="alert('Booking ${pkg.name} package!')">Book This Package</button>
+    </div>`).join('');
+}
+
+function renderHomePreview(){
+  const grid = document.getElementById('home-doctors-preview');
+  if(!grid) return;
+  const top = [...DOCTORS].sort((a,b)=>b.rating-a.rating).slice(0,4);
+  grid.innerHTML = top.map(docCardHTML).join('');
+}
+
+function handleSearch(){
+  const q = document.getElementById('home-search').value.toLowerCase();
+  if(q.includes('doctor')||q.includes('dr')||q.includes('cardiolog')||q.includes('dermat')||q.includes('neuro')) showPage('doctors');
+  else if(q.includes('mri')||q.includes('ct')||q.includes('scan')||q.includes('x-ray')||q.includes('ultrasound')) showPage('imaging');
+  else if(q.includes('test')||q.includes('lab')||q.includes('blood')||q.includes('cbc')) showPage('labs');
+  else if(q.includes('package')) showPage('packages');
+  else showPage('doctors');
+}
+
+renderHomePreview();
+function goToAppointment(id) {
+
+    const doctor = DOCTORS.find(d => d.id === id);
+
+    if (!doctor) {
+        alert("Doctor not found!");
+        return;
+    }
+
+    localStorage.setItem(
+        "selectedDoctor",
+        JSON.stringify(doctor)
+    );
+
+    window.location.href = "booking.html";
+}
+
+</script>
+</body>
+</html>
